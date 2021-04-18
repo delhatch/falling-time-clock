@@ -2,7 +2,7 @@
 A clock that displays the numbers as physical falling numbers.
 It is written in the Processing language, and uses the box2d and jbox2d physics engine.
 
-![screenshot](https://github.com/delhatch/falling-time-clock/blob/master/fallingclock1.JPG)
+![screenshot](https://github.com/delhatch/falling-time-clock/blob/master/fallingclock2.JPG)
 
 The original concept was created by "arcade perfect", AFAIK. That really cool project can be found at: https://hackaday.io/project/176037-concrete-physics-clock
   
