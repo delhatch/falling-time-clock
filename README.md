@@ -2,7 +2,7 @@
 A clock that displays the numbers as physical falling numbers.
 It is written in the Processing language, and uses the box2d and jbox2d physics engine.
 
-The original concept was created by <arcade perfect>, AFAIK. That really cool project can be found at: https://hackaday.io/project/176037-concrete-physics-clock
+The original concept was created by "arcade perfect", AFAIK. That really cool project can be found at: https://hackaday.io/project/176037-concrete-physics-clock
   
 This code base was started using the Daniel Shiffman's example project, Exercise 5.10 "AttractionApplyForce" found at https://github.com/nature-of-code/noc-examples-processing/tree/master/chp05_physicslibraries/box2d/Exercise_5_10_AttractionApplyForce
 
