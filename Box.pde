@@ -12,15 +12,36 @@ class BoxText
   String text;
   int size;
   color mycolor;
+  Vec2 center = new Vec2();
+  Vec2 upper_l = new Vec2();
+  Vec2 upper_r = new Vec2();
+  Vec2 lower_r = new Vec2();
+  Vec2 lower_l = new Vec2();
+  float temp_x;
+  float temp_y;
+  int G;
+  float distance;
+  float strength;
+  float a;
+  
+  Vec2[] vertices = new Vec2[4];
+  // Define a polygon (this is what we use for the box)
+  PolygonShape sd = new PolygonShape();
   
   // We need to keep track of a Body and a width and height
   Body body;
+  BodyDef bd = new BodyDef();
+  
+  Vec2 force = new Vec2(0.001,0.001); // Default is "apply no force."
+  Vec2 pos;
+  
+  FixtureDef secFd = new FixtureDef();
+  FixtureDef minFd = new FixtureDef();
+  FixtureDef hourFd = new FixtureDef();
   
   // Constructor
   BoxText(float x_, float y_, String text_, int size_, color mycolor_)
   {
-    //super( x_, y_, size_, size_);
-    
     x = x_;
     y = y_;
     w = size_;
@@ -34,28 +55,57 @@ class BoxText
     else {
       w = size * 1.1;
     }
-    
-    // Define a body
-    Vec2 center = new Vec2(x,y);
-    // Define a polygon (this is what we use for a rectangle)
-    PolygonShape sd = new PolygonShape();
 
-    Vec2[] vertices = new Vec2[4];
-    vertices[0] = box2d.vectorPixelsToWorld(new Vec2( -(this.w/2.1), (h/2.8) ));
-    vertices[1] = box2d.vectorPixelsToWorld(new Vec2( (this.w/2.1), (h/2.8) ));
-    vertices[2] = box2d.vectorPixelsToWorld(new Vec2( (this.w/2.1), -(h/2.8) ));
-    vertices[3] = box2d.vectorPixelsToWorld(new Vec2( -(this.w/2.1), -(h/2.8) ));
+    center.x = x;
+    center.y = y;
+    
+    temp_x = w/2.1;
+    temp_y = h/2.8;
+    upper_l.x = -temp_x; upper_l.y = temp_y;
+    upper_r.x = temp_x; upper_r.y = temp_y;
+    lower_r.x = temp_x; lower_r.y = -temp_y;
+    lower_l.x = -temp_x; lower_l.y = -temp_y;
+    vertices[0] = box2d.vectorPixelsToWorld(upper_l);
+    vertices[1] = box2d.vectorPixelsToWorld(upper_r);
+    vertices[2] = box2d.vectorPixelsToWorld(lower_r);
+    vertices[3] = box2d.vectorPixelsToWorld(lower_l);
 
     sd.set(vertices, vertices.length);
+    
+    // Define a fixture
+    //FixtureDef fd = new FixtureDef();
+    secFd.shape = sd;
+    minFd.shape = sd;
+    hourFd.shape = sd;
+    // Parameters that affect the physics
+    secFd.density = 1;
+    secFd.friction = 0.5;
+    secFd.restitution = 0.2;
+    //-----------------------
+    minFd.density = 15;
+    minFd.friction = 0.5;
+    minFd.restitution = 0.15;
+    //-----------------------
+    hourFd.density = 25;
+    hourFd.friction = 0.5;
+    hourFd.restitution = 0.15;
 
     // Define the body and make it from the shape
-    BodyDef bd = new BodyDef();
+    //BodyDef bd = new BodyDef();
     bd.type = BodyType.DYNAMIC;
     bd.position.set(box2d.coordPixelsToWorld(center));
     // Create the body
     body = box2d.createBody(bd);
     // Attach the fixture
-    body.createFixture(sd, 1.0);
+    if( this.size < 60 ) {
+      body.createFixture(secFd);
+    }
+    else if ( this.size < 110 ) {
+      body.createFixture(minFd);
+    }
+    else {
+      body.createFixture(hourFd);
+    }
 
     // Give it some initial random velocity
     body.setLinearVelocity(new Vec2(random(-5, 5), random(2, 5)));
@@ -73,34 +123,32 @@ class BoxText
       body.setGravityScale(1);
     }
     else if ( this.size < 110 ) {
-      body.setGravityScale(20);
+      body.setGravityScale(1);
     }
     else {
-      body.setGravityScale(20);
-    }
-    
-    //this.createTime = new Date();    
+      body.setGravityScale(1);
+    }  
   }
   
   Vec2 explode( BoxText m, int expPower ) {
-    //int G = -2300;
-    int G = -expPower;
-    Vec2 force = new Vec2(0.001,0.001); // Default is "apply no force."
+    G = -expPower;
+    force.x = 0.001;
+    force.y = 0.001; // Default is "apply no force."
     // Make a copy of the box that is NOT moving. (The body that this method is being applied to.)
-    Vec2 pos = body.getWorldCenter();
+    //Vec2 pos = body.getWorldCenter();
+    pos = body.getPosition();
+    //println("Exploding body at " + pos );
     // Make a copy of the box that IS moving.
-    Vec2 moverPos = m.body.getWorldCenter();
+    //Vec2 moverPos = m.body.getWorldCenter();
+    Vec2 moverPos = m.body.getPosition();
+    //println("Moving body at " + moverPos );
     // Vector pointing from moving box to Minute box.
     Vec2 distanceForce = pos.sub(moverPos);
-    Vec2 df = pos.sub(moverPos);
-    //if( ((df.x<0) && (df.y>0)) || ( (df.x>0) && (df.y<0) ) ) {
-      //println(distanceForce);
-    //}
-    float distance = distanceForce.length();
+    distance = distanceForce.length();
     //println("Dist to box is " + String.valueOf(distance) );
     if( distance < 15 ) {
       distanceForce.normalize();   // Set pointing vector (Hour box to Minute box) to unit length.
-      float strength = (G * 1 * m.body.m_mass) / (distance * distance); // Calculate gravitional force magnitude
+      strength = (G * 1 * m.body.m_mass) / (distance * distance); // Calculate gravitional force magnitude
       distanceForce.mulLocal(strength);   // Create force vector --> magnitude * direction
       force = distanceForce;
     }
@@ -110,12 +158,6 @@ class BoxText
   
   void applyLinearImpulse( Vec2 v ) {
     body.applyLinearImpulse(v, body.getWorldCenter(), true );
-  }
-  
-    // This function removes the particle from the box2d world
-  void killBody()
-  {
-    box2d.destroyBody(this.body);
   }
   
   // Is the particle ready for deletion?
@@ -129,11 +171,18 @@ class BoxText
     //  this.killBody();
     //  return true;
     //}
-    if ( (pos.y > height) || (pos.x<0) || (pos.x>width) ) {
-      killBody();
+    //if ( (pos.y > height) || (pos.x<0) || (pos.x>width) ) {
+    if( (pos.y > (height-10) ) || (pos.y < -10) || (pos.x<10) || (pos.x>(width-10) ) ) {
+      killIt();
       return true;
     }
     return false;
+  }
+  
+  void killIt() {
+    //body.destroyFixture(body.getFixtureList() );
+    box2d.destroyBody(this.body);
+    //box2d.world.destroyBody(this.body);
   }
 
   void calColor()
@@ -148,7 +197,7 @@ class BoxText
     Vec2 pos = box2d.getBodyPixelCoord(body);
     // Get its angle of rotation
     //float a = this.body.GetAngleRadians();
-    float a = body.getAngle();
+    a = body.getAngle();
     
     Fixture f = body.getFixtureList();
     PolygonShape ps = (PolygonShape) f.getShape();
@@ -264,30 +313,7 @@ class BoxSec extends BoxText
     this.mycolor=color(0,newValue,0);
   }
 
-  boolean done()
-  {
-    
-    // Let's find the screen position of the particle
-    //pos = scaleToPixels(this.body.GetPosition());
-    Vec2 pos = box2d.getBodyPixelCoord(body);
-    // Is it off the bottom of the screen?
-    //if (pos.y > height + this.w * this.h) {
-    //  this.killBody();
-    //  return true;
-    //}
-    if (pos.y > height) {
-      killBody();
-      return true;
-    }
-
-    //var diff=new Date()-this.createTime;
-    //if(diff > 60*1000) {
-    //  this.killBody();
-    //  return true;
-    //}
-
-    return false;
-  }
+  
 }
 //============================================================================
 class BoxMin extends BoxText
@@ -321,35 +347,6 @@ class BoxMin extends BoxText
 
     this.mycolor=color(newValue,0,0);
   }
-
-  boolean done()
-  {
-    
-    // Let's find the screen position of the particle
-    //pos = scaleToPixels(this.body.GetPosition());
-    Vec2 pos = box2d.getBodyPixelCoord(body);
-    // Is it off the bottom of the screen?
-    //if (pos.y > height + this.w * this.h) {
-    //  this.killBody();
-    //  return true;
-    //}
-    if (pos.y > height) {
-      killBody();
-      return true;
-    }
-
-    //var diff=new Date()-this.createTime;
-    //if(diff > 3*60*1000) {
-    //  this.killBody();
-    //  return true;
-    //}
-
-    return false;
-  }
-  
-  void killIt() {
-    killBody();
-  }
 }
 //=======================================================================
 class BoxHour extends BoxText
@@ -369,32 +366,5 @@ class BoxHour extends BoxText
     this.size = 150;
   }
 
-  boolean done()
-  {
-    
-    // Let's find the screen position of the particle
-    //pos = scaleToPixels(this.body.GetPosition());
-    Vec2 pos = box2d.getBodyPixelCoord(body);
-    // Is it off the bottom of the screen?
-    //if (pos.y > height + this.w * this.h) {
-    //  this.killBody();
-    //  return true;
-    //}
-    if (pos.y > height) {
-      killBody();
-      return true;
-    }
-
-    //diff=new Date()-this.createTime;
-    //if(diff > 60*60*1000) {
-    //  this.killBody();
-    //  return true;
-    //}
-
-    return false;
-  }
   
-  void killIt() {
-    killBody();
-  }
 }
