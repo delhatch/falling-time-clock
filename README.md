@@ -13,5 +13,4 @@ BTW, Daniel Shiffman's books "Learning Processing" and "Nature of Code" are exce
 In addition, I used some of the Box class, and time-keeping code, from JanHBade's version of this type of clock. His version is located at: https://github.com/JanHBade/FallingTime
 
 KNOWN BUGS:
-1) There is a memory leak somewhere. Due to the world's walls, the number of bodies does not grow above a certain level (around 84), but the memory usage keeps constantly increasing. This happens even as the number of bodies decreases. Not sure why.
-2) If there is no "Minutes" object on the screen, it crashes unpleasantly. At the start of each new minute, the old minute digits "explode." If there is no object to explode, the code crashes. This will be an easy fix, but I haven't done it yet.
+None.
