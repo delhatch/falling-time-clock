@@ -14,11 +14,11 @@ In addition, I used some of the Box class, and time-keeping code, from JanHBade'
 
 Note: To set the time, touch the screen where the seconds drop from. To change the colors, on the time-setting screen, touch the large numbers.
 
-COMPONENTS:
-Raspberry Pi 4
-DFRobot 5" 800x480 TFT DSI Touchscreen SKU:DFR0550
-Michaels shadow box Item: 10322045
-3D-printed parts to hold the LCD in the shadow box
+COMPONENTS:<br>
+Raspberry Pi 4<br>
+DFRobot 5" 800x480 TFT DSI Touchscreen SKU:DFR0550<br>
+Michaels shadow box Item: 10322045<br>
+3D-printed parts to hold the LCD in the shadow box<br>
 
 KNOWN BUGS:
 None.
