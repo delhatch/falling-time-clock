@@ -12,5 +12,13 @@ BTW, Daniel Shiffman's books "Learning Processing" and "Nature of Code" are exce
 
 In addition, I used some of the Box class, and time-keeping code, from JanHBade's version of this type of clock. His version is located at: https://github.com/JanHBade/FallingTime
 
+Note: To set the time, touch the screen where the seconds drop from. To change the colors, on the time-setting screen, touch the large numbers.
+
+COMPONENTS:
+Raspberry Pi 4
+DFRobot 5" 800x480 TFT DSI Touchscreen SKU:DFR0550
+Michaels shadow box Item: 10322045
+3D-printed parts to hold the LCD in the shadow box
+
 KNOWN BUGS:
 None.
