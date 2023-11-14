@@ -216,12 +216,8 @@ class BoxText
     rotate(-a);
     textSize(this.size);
     //fill(255,255,255);
-    if( this.size < 55 ) {
-      fill(#ffffcc);
-    }
-    else {
-      fill(this.mycolor);
-    }
+    fill(this.mycolor);
+    
     // Place text inside of boxes
     if( this.size <55 ) {
       // Seconds
@@ -278,15 +274,15 @@ class BoxSec extends BoxText
   color mycolor;
   
   // Constructor
-  BoxSec(float x_, float y_, String text_)
+  BoxSec(float x_, float y_, String text_, color mycolor_)
   {
-    super( x_, y_, text_, 50, color(0,255,0) );
+    super( x_, y_, text_, 50, mycolor_ );
     
     x = x_;
     y = y_;
     text = text_;
     size = 50;
-    mycolor = color(0,255,0);
+    mycolor = mycolor_;
     
     //if( text.length() == 1 ) {
     //  this.w = size / 2;
@@ -298,19 +294,9 @@ class BoxSec extends BoxText
     //}
   }
 
-  void calColor()
+  void changeColor( color thisColor_ )
   {
-    //var diff=new Date()-this.createTime;
-    //var newValue=-0.00425*diff+255;
-    int newValue = 125; 
-    if(newValue<0) {
-      newValue=0;
-    }
-    if(newValue>255) {
-      newValue=255;  
-    }
-
-    this.mycolor=color(0,newValue,0);
+    mycolor = thisColor_;
   }
 
   
@@ -327,25 +313,16 @@ class BoxMin extends BoxText
   color mycolor;
   
   // Constructor
-  BoxMin(float x_, float y_, String text_)
+  BoxMin(float x_, float y_, String text_, color mycolor_)
   {
-    super(x_,y_,text_,100,color(#007766));
+    super(x_,y_,text_,100,mycolor_);
     this.size=100;
+    mycolor = mycolor_;
   }
 
-  void calColor()
+  void changeColor( color thisColor_ )
   {
-    //var diff=new Date()-this.createTime;
-    //var newValue=-0.00105*diff+255;
-    int newValue = 128;
-    if(newValue<0) {
-      newValue=0;
-    }
-    if(newValue>255) {
-      newValue=255;  
-    }
-
-    this.mycolor=color(newValue,0,0);
+    mycolor = thisColor_;
   }
 }
 //=======================================================================
@@ -360,10 +337,16 @@ class BoxHour extends BoxText
   color mycolor;
   
   // Constructor
-  BoxHour(float x_, float y_, String text_)
+  BoxHour(float x_, float y_, String text_, color mycolor_)
   {
-    super( x_, y_, text_, 150, color(220,131,51));
+    super( x_, y_, text_, 150, mycolor_);
     this.size = 150;
+    mycolor = mycolor_;
+  }
+  
+  void changeColor( color thisColor_ )
+  {
+    mycolor = thisColor_;
   }
 
   
