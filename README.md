@@ -8,7 +8,7 @@ The original concept was created by "arcade perfect", AFAIK. That really cool pr
   
 This code base was started using the Daniel Shiffman's example project, Exercise 5.10 "AttractionApplyForce" found at https://github.com/nature-of-code/noc-examples-processing/tree/master/chp05_physicslibraries/box2d/Exercise_5_10_AttractionApplyForce
 
-BTW, Daniel Shiffman's books "Learning Processing" and "Nature of Code" are excellent! Find them at: https://shiffman.net/books/
+BTW, Daniel Shiffman's books "Learning Processing" and "Nature of Code" are excellent! Find them at: https://natureofcode.com/ <br>http://learningprocessing.com/getthebook/
 
 In addition, I used some of the Box class, and time-keeping code, from JanHBade's version of this type of clock. His version is located at: https://github.com/JanHBade/FallingTime
 
